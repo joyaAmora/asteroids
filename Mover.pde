@@ -1,13 +1,18 @@
 class Mover extends GraphicObject {
   float topSpeed = 2;
-  float topSteer = 0.03;
-  
+  float topSteer = 0.03;  
   float theta = 0;
-  float r = random(5, 20); // Rayon du boid
-  
+  float r = 10; // Rayon du boid 
   float radiusSeparation = 10 * r;
-
-  float mass = 1.0;
+  float mass = 1.0; 
+  float angle;
+  float time = 0;  
+  int nbCotes;
+  int rayon;  
+  color couleurBordure = color (200, 0, 0);
+  color couleurFond = color (0, 200, 0);  
+  float angleRotation = 0;
+  int alpha = 255;
   
   Mover () {
     location = new PVector();
@@ -15,8 +20,10 @@ class Mover extends GraphicObject {
     acceleration = new PVector();
   }
   
-  Mover (PVector loc, PVector vel) {
-    
+  Mover (PVector loc, PVector vel, int _nbCotes, int _rayon, float _angle) {
+    this.nbCotes = _nbCotes;
+    this.rayon = _rayon;
+    this.angle = _angle;
     
     this.location = loc;
     this.velocity = vel;
@@ -26,20 +33,19 @@ class Mover extends GraphicObject {
   void checkEdges() {
     if (location.x < 0) {
       location.x = width - r;
-    } else if (location.x > width) {
+    } else if (location.x + r> width) {
       location.x = 0;
     }
     
     if (location.y < 0) {
       location.y = height - r;
-    } else if (location.y > height) {
+    } else if (location.y + r> height) {
       location.y = 0;
     }
   }
   
   void flock (ArrayList<Mover> boids) {
-    PVector separation = separate(boids);
-    
+    PVector separation = separate(boids);    
     applyForce(separation);
   }
 
@@ -54,8 +60,8 @@ class Mover extends GraphicObject {
   }
   
   void display() {
-    noStroke();
-    fill (fillColor);
+    fill (color (red(couleurFond), green(couleurFond), blue(couleurFond), alpha));
+    stroke (couleurBordure);
     
     theta = velocity.heading() + radians(90);
     
@@ -63,12 +69,17 @@ class Mover extends GraphicObject {
     translate(location.x, location.y);
     rotate (theta);
     
-    beginShape(TRIANGLES);
-      vertex(0, -r * 2);
-      vertex(-r, r * 2);
-      vertex(r, r * 2);
+    beginShape();
     
-    endShape();
+    float angleIncrement = TWO_PI / (float) nbCotes;
+    for (float a = 0; a < TWO_PI; a += angleIncrement) {
+      float sx = cos (a) * rayon;
+      float sy = sin (a) * rayon;
+      
+      vertex (sx, sy);
+    }
+    
+    endShape (CLOSE);
     
     popMatrix();  
   }
@@ -81,7 +92,7 @@ class Mover extends GraphicObject {
     for (Mover other : boids) {
       float d = PVector.dist(location, other.location);
       
-      if (d > 0 && d < radiusSeparation) {
+      if (d > 25 && d < radiusSeparation) {
         PVector diff = PVector.sub(location, other.location);
         
         diff.normalize(); // Ramène à une longueur de 1

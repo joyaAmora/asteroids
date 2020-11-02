@@ -1,9 +1,10 @@
 int currentTime;
 int previousTime;
 int deltaTime;
+int randomSize = int(map(abs(randomGaussian() + 2 + 15), -1,1, -2,2));
 
 ArrayList<Mover> flock; // les astéroids
-int flockSize = 25;
+int flockSize = 10;
 
 void setup () {
   size (900, 700);
@@ -13,8 +14,10 @@ void setup () {
   flock = new ArrayList<Mover>();
   
   for (int i = 0; i < flockSize; i++) {
-    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)));
-    m.fillColor = color(random(255), random(255), random(255));
+    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(1,15)), randomSize, 0);
+    m.couleurFond = color (random (0, 255), random (0, 255), random (0, 255));
+    m.angleRotation = TWO_PI / 360 * random(-10, 10);
+    m.alpha = int(random (25, 255));
     flock.add(m);
   }
 }
