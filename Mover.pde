@@ -13,6 +13,7 @@ class Mover extends GraphicObject {
   color couleurFond = color (0, 200, 0);  
   float angleRotation = 0;
   int alpha = 255;
+  int life;
   
   Mover () {
     location = new PVector();
@@ -20,6 +21,21 @@ class Mover extends GraphicObject {
     acceleration = new PVector();
   }
   
+   float getRadius() {
+    return r;
+  }
+
+   boolean isColliding(Mover other) {
+    boolean result = false;
+    
+    float distance = PVector.dist(this.location, other.location);
+    
+    if ((this.getRadius() + other.getRadius()) >= distance) {
+      result = true;
+    }
+    return result;
+   }
+
   Mover (PVector loc, PVector vel, int _nbCotes, int _rayon, float _angle) {
     this.nbCotes = _nbCotes;
     this.rayon = _rayon;
@@ -50,7 +66,7 @@ class Mover extends GraphicObject {
   }
 
   void update(float deltaTime) {
-    checkEdges();
+    //checkEdges();
     
     velocity.add (acceleration);
     velocity.limit(topSpeed);
