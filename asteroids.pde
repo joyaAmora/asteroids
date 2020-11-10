@@ -3,9 +3,8 @@ import java.util.Iterator;
 int currentTime;
 int previousTime;
 int deltaTime;
-int randomSize = int(map(abs(randomGaussian() * 2 + 15), -1,1, -2,2));
 int direction;
-
+int randomSize;
 boolean fired = false;
 Mover spaceShip;
 ArrayList<Mover> bullets = new ArrayList<Mover>();
@@ -27,17 +26,20 @@ void setup () {
   flock = new ArrayList<Mover>();
   
   for (int i = 0; i < flockSize; i++) {
+    randomSize = int(map(abs(randomGaussian() * 2 + 15), -1,1, -2,2));
     Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(3,15)), randomSize, 0, true);
     m.couleurFond = color (random (0, 255), random (0, 255), random (0, 255));
     m.angleRotation = TWO_PI / 360 * random(-10, 10);
     m.alpha = int(random (25, 255));
     flock.add(m);
-    m.life = 2;
+    m.life = randomSize/10;
+    println(randomSize);
   }
 
   spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
+  spaceShip.life = 5;
   println("Fire with A, W or D");
 }
 
@@ -78,6 +80,16 @@ void update(int delta) {
         }      
       }
     }
+    if(m.IsColliding(spaceShip)){
+      addParticules(5,spaceShip);
+      spaceShip.life --;
+      flockAsteroidIterator.remove();
+      println("AYOYE!");
+      if(spaceShip.life <= 0){
+        println("KAPOW PIF PAF BOOM!");
+        println("GAME OVER");
+      }
+    }
   }
   spaceShip.update(delta);
   if(fired){
@@ -101,6 +113,9 @@ void keyPressed() {
     fire();
     fired = true;
   }
+  if(key == 'r'){
+    setup();
+  }
 }
 /***
 
@@ -112,7 +127,8 @@ void display () {
   for (Mover m : flock) {
     m.display();
   }
-  spaceShip.display();
+  if(spaceShip.life > 0)
+    spaceShip.display();
   if(fired){
     for(Mover b : bullets)
       b.display();

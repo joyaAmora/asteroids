@@ -31,7 +31,7 @@ class Mover extends GraphicObject implements ICollidable{
     
     float distance = PVector.dist(this.location, other.location);
     
-    if ((this.getRadius() + other.getRadius())*1.75 >= distance) {
+    if ((this.getRadius() + other.getRadius())*2 >= distance) {
       result = true;
     }
     return result;
