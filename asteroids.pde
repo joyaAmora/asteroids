@@ -13,27 +13,32 @@ ArrayList<Mover> flock; // les astéroids
 int flockSize = 25;
 ArrayList<Particle> particles;
 
+Background background;
+
 void setup () {
-  size (900, 700);
+  size (900, 750, P2D);
+  
   currentTime = millis();
   previousTime = millis();
   
+  background = new Background("imgPlanete.png");
+
   particles = new ArrayList<Particle>();
   flock = new ArrayList<Mover>();
   
   for (int i = 0; i < flockSize; i++) {
-    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(3,15)), randomSize, 0);
+    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(3,15)), randomSize, 0, true);
     m.couleurFond = color (random (0, 255), random (0, 255), random (0, 255));
     m.angleRotation = TWO_PI / 360 * random(-10, 10);
     m.alpha = int(random (25, 255));
     flock.add(m);
-    m.life = randomSize;
+    m.life = 2;
   }
 
-  spaceShip = new Mover(new PVector ((width/2), (660)), new PVector(0,0), 6, 40, 0);
+  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
-  print("Fire with A, W or D");
+  println("Fire with A, W or D");
 }
 
 void draw () {
@@ -50,21 +55,27 @@ void draw () {
   The calculations should go here
 */
 void update(int delta) {
-  
-  for (Mover m : flock) {
+  background.update(delta);
+  Iterator<Mover> flockAsteroidIterator = flock.iterator();
+  while(flockAsteroidIterator.hasNext()){
+    Mover m = flockAsteroidIterator.next();
     m.flock(flock);
     m.update(delta);
+
     Iterator<Mover> it = bullets.iterator();
+
     while(it.hasNext()){
       Mover b = it.next();
-      if (m.isColliding(b)){
-        for(int i=0; i<2;i++){
-          particles.add(new Particle(new PVector (b.location.x, b.location.y)));
-        }
-        print("Target hit");
+      if (m.IsColliding(b)){
+        addParticules(3, b);
+        println("POW!");
         it.remove();
-        b.alpha = 0;
-        b.couleurBordure = 0;
+        m.life--; 
+        if(m.life <= 0){
+          addParticules(50, m);
+          flockAsteroidIterator.remove();
+          println("KAPOW!");
+        }      
       }
     }
   }
@@ -77,6 +88,14 @@ void update(int delta) {
       p.update(delta);
 }
 
+  void addParticules(int nbrParticules, Mover b){
+    for(int i=0; i< nbrParticules;i++){
+      particles.add(new Particle(new PVector (b.location.x, b.location.y)));
+    }
+  }
+
+  
+
 void keyPressed() {
   if(key == 'a' || key == 's'|| key == 'd' || key == 'w'){
     fire();
@@ -88,7 +107,7 @@ void keyPressed() {
   The rendering should go here
 */
 void display () {
-  background(0);
+  background.display();
   
   for (Mover m : flock) {
     m.display();
@@ -105,9 +124,9 @@ void display () {
 
 void fire(){
   if(key == 'w')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(0,-500), 20, 10, 0));
+    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(0,-500), 20, 10, 0, true));
   if(key == 'd')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(500,-250), 20, 10, 0));
+    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(500,-250), 20, 10, 0, true));
   if(key == 'a')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(-500,-250), 20, 10, 0));
+    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(-500,-250), 20, 10, 0, true));
 }

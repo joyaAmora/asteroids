@@ -14,6 +14,7 @@ class Particle extends GraphicObject {
     lifespan = random(200, 255);
   }
 
+
   void update(float deltaTime) {
     velocity.add (acceleration);
     location.add (velocity);

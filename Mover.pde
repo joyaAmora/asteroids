@@ -1,4 +1,4 @@
-class Mover extends GraphicObject {
+class Mover extends GraphicObject implements ICollidable{
   float topSpeed = 2;
   float topSteer = 0.03;  
   float theta = 0;
@@ -14,6 +14,7 @@ class Mover extends GraphicObject {
   float angleRotation = 0;
   int alpha = 255;
   int life;
+  boolean isCollidable;
   
   Mover () {
     location = new PVector();
@@ -25,18 +26,18 @@ class Mover extends GraphicObject {
     return r;
   }
 
-   boolean isColliding(Mover other) {
+   boolean IsColliding(Mover other) {
     boolean result = false;
     
     float distance = PVector.dist(this.location, other.location);
     
-    if ((this.getRadius() + other.getRadius()) >= distance) {
+    if ((this.getRadius() + other.getRadius())*1.75 >= distance) {
       result = true;
     }
     return result;
    }
 
-  Mover (PVector loc, PVector vel, int _nbCotes, int _rayon, float _angle) {
+  Mover (PVector loc, PVector vel, int _nbCotes, int _rayon, float _angle, boolean isCollidable) {
     this.nbCotes = _nbCotes;
     this.rayon = _rayon;
     this.angle = _angle;
@@ -44,6 +45,7 @@ class Mover extends GraphicObject {
     this.location = loc;
     this.velocity = vel;
     this.acceleration = new PVector (0 , 0);
+    this.isCollidable = isCollidable;
   }
   
   void checkEdges() {
