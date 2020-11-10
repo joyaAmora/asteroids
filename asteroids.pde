@@ -33,10 +33,9 @@ void setup () {
     m.alpha = int(random (25, 255));
     flock.add(m);
     m.life = randomSize/10;
-    println(randomSize);
   }
 
-  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
+  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 3, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
@@ -91,6 +90,18 @@ void update(int delta) {
       }
     }
   }
+
+if(keyPressed == true){
+  if(keyCode == LEFT)
+    spaceShip.location.x -= 1;
+  if(keyCode == RIGHT)
+    spaceShip.location.x += 1;
+  if(keyCode == UP)
+    spaceShip.location.y -= 1;
+  if(keyCode == DOWN)
+    spaceShip.location.y += 1;
+}
+
   spaceShip.update(delta);
   if(fired){
     for(Mover b : bullets)
@@ -98,6 +109,7 @@ void update(int delta) {
   }
    for(Particle p : particles)
       p.update(delta);
+      
 }
 
   void addParticules(int nbrParticules, Mover b){
