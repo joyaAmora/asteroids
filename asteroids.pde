@@ -20,7 +20,7 @@ void setup () {
   currentTime = millis();
   previousTime = millis();
   
-  background = new Background("imgPlanete.png");
+  //background = new Background("imgPlanete.png");
 
   particles = new ArrayList<Particle>();
   flock = new ArrayList<Mover>();
@@ -56,7 +56,7 @@ void draw () {
   The calculations should go here
 */
 void update(int delta) {
-  background.update(delta);
+  //background.update(delta);
   Iterator<Mover> flockAsteroidIterator = flock.iterator();
   while(flockAsteroidIterator.hasNext()){
     Mover m = flockAsteroidIterator.next();
@@ -122,7 +122,7 @@ if(keyPressed == true){
 
 void keyPressed() {
   if(key == 'a' || key == 's'|| key == 'd' || key == 'w'){
-    fire();
+    fire(spaceShip);
     fired = true;
   }
   if(key == 'r'){
@@ -134,7 +134,7 @@ void keyPressed() {
   The rendering should go here
 */
 void display () {
-  background.display();
+  //background.display();
   
   for (Mover m : flock) {
     m.display();
@@ -150,13 +150,13 @@ void display () {
     p.display();
 }
 
-void fire(){
+void fire(Mover vaisseau){
   if(key == 'w')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(0,-500), 20, 10, 0, true));
+    bullets.add(new Mover(new PVector ((vaisseau.location.x), (vaisseau.location.y)), new PVector(0,-500), 20, 10, 0, true));
   if(key == 'd')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(500,-250), 20, 10, 0, true));
+    bullets.add(new Mover(new PVector ((vaisseau.location.x), (vaisseau.location.y)), new PVector(500,-250), 20, 10, 0, true));
   if(key == 'a')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(-500,-250), 20, 10, 0, true));
+    bullets.add(new Mover(new PVector ((vaisseau.location.x), (vaisseau.location.y)), new PVector(-500,-250), 20, 10, 0, true));
   if(key == 's')
-    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(0,500), 20, 10, 0, true));
+    bullets.add(new Mover(new PVector ((vaisseau.location.x), (vaisseau.location.y)), new PVector(0,500), 20, 10, 0, true));
 }
