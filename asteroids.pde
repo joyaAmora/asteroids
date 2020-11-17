@@ -35,7 +35,7 @@ void setup () {
     m.life = randomSize/10;
   }
 
-  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 3, 40, 0, true);
+  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
@@ -86,7 +86,7 @@ void update(int delta) {
       println("AYOYE!");
       if(spaceShip.life <= 0){
         println("KAPOW PIF PAF BOOM!");
-        println("GAME OVER");
+        println("------------------GAME OVER------------------");
       }
     }
   }
@@ -157,4 +157,6 @@ void fire(){
     bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(500,-250), 20, 10, 0, true));
   if(key == 'a')
     bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(-500,-250), 20, 10, 0, true));
+  if(key == 's')
+    bullets.add(new Mover(new PVector ((width/2), (660)), new PVector(0,500), 20, 10, 0, true));
 }
