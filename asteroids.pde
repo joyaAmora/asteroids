@@ -6,7 +6,10 @@ int previousTime;
 int deltaTime;
 int direction;
 int randomSize;
+int vitesseDeplacement = 1;
 boolean fired = false;
+boolean showMiniMap = true;
+boolean showControls = false;
 Mover spaceShip;
 ArrayList<Mover> bullets = new ArrayList<Mover>();
 ArrayList<Mover> flock; // les astéroids
@@ -14,6 +17,8 @@ int flockSize = 25;
 ArrayList<Particle> particles;
 MiniMap miniMap;
 PFont spaceShipLifeBar;
+PFont controllers;
+PFont controls;
 SoundFile itemDestroyed;
 SoundFile targetHit;
 
@@ -24,6 +29,8 @@ void setup () {
   size (900, 750, P2D);
 
   spaceShipLifeBar = createFont("Verdana", 18, true);
+  controllers = createFont("Verdana", 18, true);
+  controls = createFont("Verdana", 18, true);
 
   miniMap = new MiniMap();
   currentTime = millis();
@@ -51,8 +58,6 @@ void setup () {
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
-
-  println("Fire with A, W or D");
 }
 
 void draw () {
@@ -64,7 +69,11 @@ void draw () {
   display();  
   textFont(spaceShipLifeBar, 24);
   fill(175,0,0);
-  text("Vies: " + spaceShip.life, 50, 50);
+  text("Vies: " + spaceShip.life, 25, 50);
+  
+  textFont(controllers, 24);
+  fill(255);
+  text("Appuyez sur ctrl pour afficher les contrôles " , width/3, 50);
 }
 
 /***
@@ -112,13 +121,13 @@ void update(int delta) {
 
 if(keyPressed == true){
   if(keyCode == LEFT)
-    spaceShip.location.x -= 1;
+    spaceShip.location.x -= vitesseDeplacement;
   if(keyCode == RIGHT)
-    spaceShip.location.x += 1;
+    spaceShip.location.x += vitesseDeplacement;
   if(keyCode == UP)
-    spaceShip.location.y -= 1;
+    spaceShip.location.y -= vitesseDeplacement;
   if(keyCode == DOWN)
-    spaceShip.location.y += 1;
+    spaceShip.location.y += vitesseDeplacement;
 }
 
   spaceShip.update(delta);
@@ -146,6 +155,13 @@ void keyPressed() {
   }
   if(key == 'r'){
     setup();
+    showControls = false;
+  }
+  if(keyCode == CONTROL){
+    if(showControls)
+      showControls = false;
+    else
+      showControls = true;
   }
 }
 /***
@@ -157,6 +173,7 @@ void display () {
   for (Mover m : flock) {
     m.display();
   }
+  
   if(spaceShip.life > 0)
     spaceShip.display();
   if(fired){
@@ -166,6 +183,20 @@ void display () {
 
    for(Particle p : particles) 
     p.display();
+    
+      if(showMiniMap)
+        //affiche minimap
+        showMiniMap = true;
+      else
+        //cache minimap
+        showMiniMap = false;
+
+      if(showControls){
+        textFont(controls, 24);
+        fill(255);
+        text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie", width/2, height/2);
+      }
+        
 }
 
 void fire(Mover vaisseau){
