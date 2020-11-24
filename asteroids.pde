@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import processing.sound.*;
 
 int currentTime;
 int previousTime;
@@ -11,16 +12,27 @@ ArrayList<Mover> bullets = new ArrayList<Mover>();
 ArrayList<Mover> flock; // les astéroids
 int flockSize = 25;
 ArrayList<Particle> particles;
+MiniMap miniMap;
+PFont spaceShipLifeBar;
+SoundFile itemDestroyed;
+SoundFile targetHit;
+
 
 Background background;
 
 void setup () {
   size (900, 750, P2D);
-  
+
+  spaceShipLifeBar = createFont("Verdana", 18, true);
+
+  miniMap = new MiniMap();
   currentTime = millis();
   previousTime = millis();
-  
-  //background = new Background("imgPlanete.png");
+
+  itemDestroyed = new SoundFile(this, "Destroyed.aiff");
+  targetHit = new SoundFile(this, "targetHit.aiff");
+
+  background = new Background("imgPlanete.png");
 
   particles = new ArrayList<Particle>();
   flock = new ArrayList<Mover>();
@@ -39,24 +51,27 @@ void setup () {
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
+
   println("Fire with A, W or D");
 }
 
 void draw () {
   currentTime = millis();
   deltaTime = currentTime - previousTime;
-  previousTime = currentTime;
-
+  previousTime = currentTime; 
   
   update(deltaTime);
   display();  
+  textFont(spaceShipLifeBar, 24);
+  fill(175,0,0);
+  text("Vies: " + spaceShip.life, 50, 50);
 }
 
 /***
   The calculations should go here
 */
 void update(int delta) {
-  //background.update(delta);
+  background.update(delta);
   Iterator<Mover> flockAsteroidIterator = flock.iterator();
   while(flockAsteroidIterator.hasNext()){
     Mover m = flockAsteroidIterator.next();
@@ -70,12 +85,14 @@ void update(int delta) {
       if (m.IsColliding(b)){
         addParticules(3, b);
         println("POW!");
+        targetHit.play();
         it.remove();
         m.life--; 
         if(m.life <= 0){
           addParticules(50, m);
           flockAsteroidIterator.remove();
           println("KAPOW!");
+          itemDestroyed.play();
         }      
       }
     }
@@ -84,9 +101,11 @@ void update(int delta) {
       spaceShip.life --;
       flockAsteroidIterator.remove();
       println("AYOYE!");
+      targetHit.play();
       if(spaceShip.life <= 0){
         println("KAPOW PIF PAF BOOM!");
         println("------------------GAME OVER------------------");
+        itemDestroyed.play();
       }
     }
   }
@@ -134,8 +153,7 @@ void keyPressed() {
   The rendering should go here
 */
 void display () {
-  //background.display();
-  
+  background.display();
   for (Mover m : flock) {
     m.display();
   }
