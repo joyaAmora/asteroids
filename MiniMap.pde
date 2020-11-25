@@ -25,10 +25,10 @@ int w, h;
 
     public void display(){
         pushMatrix();
-            rect(0, 0, w, h);
-            for(Mover f : flock){
+            rect(800, 650, w, h);
+            /*for(Mover f : flock){
                 point(f.location.x/10, f.location.y/10);
-            }
+            }*/
         popMatrix();
     }
 }

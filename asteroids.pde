@@ -6,7 +6,7 @@ int previousTime;
 int deltaTime;
 int direction;
 int randomSize;
-int vitesseDeplacement = 1;
+int vitesseDeplacement = 2;
 boolean fired = false;
 boolean showMiniMap = true;
 boolean showControls = false;
@@ -156,6 +156,7 @@ void keyPressed() {
   if(key == 'r'){
     setup();
     showControls = false;
+    vitesseDeplacement = 2;
   }
   if(keyCode == CONTROL){
     if(showControls)
@@ -163,6 +164,11 @@ void keyPressed() {
     else
       showControls = true;
   }
+  if(key == '1')
+    vitesseDeplacement = 1;
+  if(key == '2')
+    vitesseDeplacement = 2;
+
 }
 /***
 
@@ -194,9 +200,9 @@ void display () {
       if(showControls){
         textFont(controls, 24);
         fill(255);
-        text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie", width/2, height/2);
+        text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie, \n 1 ou 2 pour changer la difficultée", width/2, height/2);
       }
-        
+      miniMap.display();    
 }
 
 void fire(Mover vaisseau){
