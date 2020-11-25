@@ -1,8 +1,9 @@
 class Background {
     PImage background;
-    float scale = 0.33;
+    float scale = 0.25;
     PVector position;
     PVector velocity;
+    boolean isParallax = false;
 
     Background (String imgPath){
         background = loadImage(imgPath);
@@ -16,9 +17,19 @@ class Background {
 
     void update(int deltaTime) {
         position.add(velocity);
+        position.x = position.x % width;
     }
 
     void display() {
-        image(background, position.x, position.y, background.width * scale, background.height * scale);
+        image (background, position.x, position.y, background.width, background.height);
+        if (isParallax) {
+            if(position.x < 0){
+                image(background, position.x + background.width, position.y, background.width * scale, background.height * scale);
+            }
+            else if((position.x + background.width) > width)
+                image(background, position.x - background.width, position.y, background.width*scale, background.height*scale);
+        }
     }
+
+
 }

@@ -6,13 +6,13 @@ int w, h;
 
     MiniMap(){
         movers = new ArrayList<Mover>();
-        w = width/10;
-        h = height/10;
+        w = width/5;
+        h = height/7;
         background(0);
     }
 
     public void update(int delta){
-
+        
     }
 
     public void setObjects(ArrayList<Mover> flock) {
@@ -25,10 +25,10 @@ int w, h;
 
     public void display(){
         pushMatrix();
-            rect(800, 650, w, h);
-            /*for(Mover f : flock){
-                point(f.location.x/10, f.location.y/10);
-            }*/
+            rect(700, 625, w, h);
+            for(Mover f : flock){
+                point(f.location.x/5, f.location.y/7);
+            }
         popMatrix();
     }
 }

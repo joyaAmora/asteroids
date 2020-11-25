@@ -22,12 +22,11 @@ PFont controls;
 SoundFile itemDestroyed;
 SoundFile targetHit;
 
-
-Background background;
+ArrayList<Background> background;
 
 void setup () {
   size (900, 750, P2D);
-
+  loadBackgroundLayers();
   spaceShipLifeBar = createFont("Verdana", 18, true);
   controllers = createFont("Verdana", 18, true);
   controls = createFont("Verdana", 18, true);
@@ -38,8 +37,6 @@ void setup () {
 
   itemDestroyed = new SoundFile(this, "Destroyed.aiff");
   targetHit = new SoundFile(this, "targetHit.aiff");
-
-  background = new Background("imgPlanete.png");
 
   particles = new ArrayList<Particle>();
   flock = new ArrayList<Mover>();
@@ -52,12 +49,36 @@ void setup () {
     m.alpha = int(random (25, 255));
     flock.add(m);
     m.life = randomSize/10;
+    miniMap.addObject(m);
+    miniMap.setObjects(flock);
+
   }
 
   spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
+}
+
+void loadBackgroundLayers() {
+    background = new ArrayList<Background>();
+    background.add(new Background("imgPlanete.png"));
+    background.add(new Background("stars.png"));
+
+    float speedIncrement = 0.5;
+    float currentSpeed = 1;
+
+      for (int i = 0; i < background.size(); i++) {
+        Background current = background.get(i);
+    
+        if (i > 0) {      
+          current.isParallax = true;
+          current.velocity.x = currentSpeed;
+          currentSpeed += speedIncrement;
+        } 
+    
+    current.scale = 0.5;
+  }
 }
 
 void draw () {
@@ -80,7 +101,9 @@ void draw () {
   The calculations should go here
 */
 void update(int delta) {
-  background.update(delta);
+ for (Background bg : background) {
+    bg.update(delta);
+}
   Iterator<Mover> flockAsteroidIterator = flock.iterator();
   while(flockAsteroidIterator.hasNext()){
     Mover m = flockAsteroidIterator.next();
@@ -137,7 +160,7 @@ if(keyPressed == true){
   }
    for(Particle p : particles)
       p.update(delta);
-      
+
 }
 
   void addParticules(int nbrParticules, Mover b){
@@ -164,6 +187,12 @@ void keyPressed() {
     else
       showControls = true;
   }
+  if(keyCode == TAB){
+    if(showMiniMap)
+      showMiniMap = false;
+    else
+      showMiniMap = true;
+  }
   if(key == '1')
     vitesseDeplacement = 1;
   if(key == '2')
@@ -175,7 +204,9 @@ void keyPressed() {
   The rendering should go here
 */
 void display () {
-  background.display();
+  for (Background bg : background) {
+    bg.display();
+  }  
   for (Mover m : flock) {
     m.display();
   }
@@ -190,19 +221,13 @@ void display () {
    for(Particle p : particles) 
     p.display();
     
-      if(showMiniMap)
-        //affiche minimap
-        showMiniMap = true;
-      else
-        //cache minimap
-        showMiniMap = false;
-
-      if(showControls){
-        textFont(controls, 24);
-        fill(255);
-        text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie, \n 1 ou 2 pour changer la difficultée", width/2, height/2);
-      }
-      miniMap.display();    
+    if(showControls){
+      textFont(controls, 24);
+      fill(255);
+      text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie \n 1 ou 2 pour changer la difficultée \n TAB pour activer/désactiver Minimap", width/2, height/2);
+    }
+    if(showMiniMap)
+      miniMap.display();
 }
 
 void fire(Mover vaisseau){

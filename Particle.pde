@@ -25,8 +25,8 @@ class Particle extends GraphicObject {
     stroke (strokeColor, lifespan);
     fill (fillColor, lifespan);
     pushMatrix();
-    translate(location.x, location.y);
-    ellipse (0, 0, radius, radius);
+      translate(location.x, location.y);
+      ellipse (0, 0, radius, radius);
     popMatrix();
   }
 
