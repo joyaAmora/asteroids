@@ -1,0 +1,90 @@
+[33mcommit 6b0b5e1[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Wed Nov 25 15:45:11 2020 -0500
+
+    parallax fonctionnel
+
+[33mcommit 584936b[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Wed Nov 25 13:50:03 2020 -0500
+
+    vitesse/difficultée
+
+[33mcommit 4671b14[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 24 13:59:24 2020 -0500
+
+    ajout de l'affichage des controles
+
+[33mcommit 7e9b741[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 24 10:28:02 2020 -0500
+
+    ajout du son
+
+[33mcommit fe8b45c[m
+Merge: 0256782 f1d517f
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 17 10:44:03 2020 -0500
+
+    Merge branch 'master' of https://github.com/joyaAmora/asteroids
+
+[33mcommit 0256782[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 17 10:40:57 2020 -0500
+
+    affichage
+
+[33mcommit f1d517f[m
+Author: joyaAmora <jade.phaneuf@gmail.com>
+Date:   Tue Nov 17 09:20:46 2020 -0500
+
+    bullets partent du vaisseau peu importe la position
+
+[33mcommit ce752eb[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 10 16:31:40 2020 -0500
+
+    déplacement de vaisseau avec les flèches
+
+[33mcommit f8e9c1b[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 10 13:50:50 2020 -0500
+
+    gestion vie vaisseau ajout reset
+
+[33mcommit 6db4277[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 10 13:18:36 2020 -0500
+
+    destruction des astéroids, ajout background, et ICollidable
+
+[33mcommit c1e1282[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Thu Nov 5 08:23:23 2020 -0500
+
+    collision, particules et suppression bullets si contact
+
+[33mcommit 7e446c2[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Nov 3 13:11:39 2020 -0500
+
+    ajout du vaisseau et bullets
+
+[33mcommit f3b3597[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Mon Nov 2 11:34:12 2020 -0500
+
+    ajout de shapes variables et rnd gaussian
+
+[33mcommit 622d23d[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Oct 27 14:17:35 2020 -0400
+
+    init
+
+[33mcommit 51a78ce[m
+Author: Jade <jade.phaneuf@gmail.com>
+Date:   Tue Oct 27 13:34:04 2020 -0400
+
+    gitignore

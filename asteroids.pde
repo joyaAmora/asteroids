@@ -15,7 +15,6 @@ ArrayList<Mover> bullets = new ArrayList<Mover>();
 ArrayList<Mover> flock; // les astéroids
 int flockSize = 25;
 ArrayList<Particle> particles;
-MiniMap miniMap;
 PFont spaceShipLifeBar;
 PFont controllers;
 PFont controls;
@@ -25,17 +24,16 @@ SoundFile targetHit;
 ArrayList<Background> background;
 
 void setup () {
-  size (900, 750, P2D);
+  size (1000, 850, P2D);
   loadBackgroundLayers();
   spaceShipLifeBar = createFont("Verdana", 18, true);
   controllers = createFont("Verdana", 18, true);
   controls = createFont("Verdana", 18, true);
 
-  miniMap = new MiniMap();
   currentTime = millis();
   previousTime = millis();
 
-  itemDestroyed = new SoundFile(this, "Destroyed.aiff");
+  itemDestroyed = new SoundFile(this, "destroyed.aiff");
   targetHit = new SoundFile(this, "targetHit.aiff");
 
   particles = new ArrayList<Particle>();
@@ -43,24 +41,22 @@ void setup () {
   
   for (int i = 0; i < flockSize; i++) {
     randomSize = int(map(abs(randomGaussian() * 2 + 15), -1,1, -2,2));
-    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(3,15)), randomSize, 0, true);
+    Mover m = new Mover(new PVector(random(0, width), random(0, height)), new PVector(random (-5, 5), random(-5, 5)), int(random(3,15)), randomSize, 0, true); //Les astéroïdes sont Collidable
     m.couleurFond = color (random (0, 255), random (0, 255), random (0, 255));
     m.angleRotation = TWO_PI / 360 * random(-10, 10);
     m.alpha = int(random (25, 255));
     flock.add(m);
-    m.life = randomSize/10;
-    miniMap.addObject(m);
-    miniMap.setObjects(flock);
+    m.life = randomSize/10; //Vie de chaque astéroïdes en fonction de sa taille (entre 1 et 3)
 
   }
 
-  spaceShip = new Mover(new PVector ((width/2), (700)), new PVector(0,0), 6, 40, 0, true);
+  spaceShip = new Mover(new PVector ((width/2), (800)), new PVector(0,0), 6, 40, 0, true);
   spaceShip.couleurFond = color(255);
   spaceShip.alpha = int (200);
   spaceShip.life = 5;
 }
 
-void loadBackgroundLayers() {
+void loadBackgroundLayers() { //Implémentation du parallax
     background = new ArrayList<Background>();
     background.add(new Background("imgPlanete.png"));
     background.add(new Background("stars.png"));
@@ -120,9 +116,9 @@ void update(int delta) {
         targetHit.play();
         it.remove();
         m.life--; 
-        if(m.life <= 0){
+        if(m.life <= 0){ //Si l'astéroïdes n'a plus de vie
           addParticules(50, m);
-          flockAsteroidIterator.remove();
+          flockAsteroidIterator.remove(); //destruction et on retire l'astéroïde du jeu
           println("KAPOW!");
           itemDestroyed.play();
         }      
@@ -131,10 +127,10 @@ void update(int delta) {
     if(m.IsColliding(spaceShip)){
       addParticules(5,spaceShip);
       spaceShip.life --;
-      flockAsteroidIterator.remove();
+      flockAsteroidIterator.remove(); //destruction et on retire l'astéroïde du jeu
       println("AYOYE!");
       targetHit.play();
-      if(spaceShip.life <= 0){
+      if(spaceShip.life <= 0){ //Si le vaisseau n'a plus de vie
         println("KAPOW PIF PAF BOOM!");
         println("------------------GAME OVER------------------");
         itemDestroyed.play();
@@ -143,7 +139,7 @@ void update(int delta) {
   }
 
 if(keyPressed == true){
-  if(keyCode == LEFT)
+  if(keyCode == LEFT) //1 vitesse lente, difficulté plus élevé, 2 vitesse rapide
     spaceShip.location.x -= vitesseDeplacement;
   if(keyCode == RIGHT)
     spaceShip.location.x += vitesseDeplacement;
@@ -154,6 +150,7 @@ if(keyPressed == true){
 }
 
   spaceShip.update(delta);
+  
   if(fired){
     for(Mover b : bullets)
       b.update(delta);
@@ -163,7 +160,7 @@ if(keyPressed == true){
 
 }
 
-  void addParticules(int nbrParticules, Mover b){
+  void addParticules(int nbrParticules, Mover b){ //Fonction qui ajoute les particules lors des impacts
     for(int i=0; i< nbrParticules;i++){
       particles.add(new Particle(new PVector (b.location.x, b.location.y)));
     }
@@ -187,12 +184,6 @@ void keyPressed() {
     else
       showControls = true;
   }
-  if(keyCode == TAB){
-    if(showMiniMap)
-      showMiniMap = false;
-    else
-      showMiniMap = true;
-  }
   if(key == '1')
     vitesseDeplacement = 1;
   if(key == '2')
@@ -207,27 +198,27 @@ void display () {
   for (Background bg : background) {
     bg.display();
   }  
+
   for (Mover m : flock) {
     m.display();
   }
   
   if(spaceShip.life > 0)
     spaceShip.display();
+
   if(fired){
     for(Mover b : bullets)
       b.display();
   }
 
-   for(Particle p : particles) 
+  for(Particle p : particles) 
     p.display();
-    
-    if(showControls){
-      textFont(controls, 24);
-      fill(255);
-      text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie \n 1 ou 2 pour changer la difficultée \n TAB pour activer/désactiver Minimap", width/2, height/2);
-    }
-    if(showMiniMap)
-      miniMap.display();
+  
+  if(showControls){
+    textFont(controls, 24);
+    fill(255);
+    text("Déplacement avec les flèches \n A,S,D,W pour tirer \n R pour redémarrer la partie \n 1 ou 2 pour changer la difficultée", width/2, height/2);
+  }
 }
 
 void fire(Mover vaisseau){

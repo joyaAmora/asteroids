@@ -1,4 +1,4 @@
-class Mover extends GraphicObject implements ICollidable{
+class Mover extends GraphicObject implements ICollidable{ //Implémente le ICollidable pour avoir le fonction isColliding et la propriété isCollidable
   float topSpeed = 2;
   float topSteer = 0.03;  
   float theta = 0;

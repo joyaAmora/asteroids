@@ -1,6 +1,6 @@
 class Background {
     PImage background;
-    float scale = 0.25;
+    float scale = 0.1;
     PVector position;
     PVector velocity;
     boolean isParallax = false;
